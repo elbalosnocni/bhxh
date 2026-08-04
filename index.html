@@ -1,19 +1,51 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
   <title>Tra cứu BHXH</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: Arial, sans-serif;
       padding: 15px;
       background: #f5f6fa;
+      color: #333;
     }
 
     h2 {
       text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .support-box {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .btn-zalo {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background-color: #0068ff;
+      color: white;
+      border-radius: 20px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .qr-code {
+      display: block;
+      margin: 10px auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
     input {
@@ -25,22 +57,27 @@
       border-radius: 8px;
       border: 1px solid #ccc;
       font-size: 16px;
-      box-sizing: border-box;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      border-color: #0068ff;
     }
 
     .card {
       background: white;
       border-radius: 10px;
-      padding: 12px;
+      padding: 15px;
       margin: 10px auto;
       max-width: 400px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      line-height: 1.5; /* Thêm giãn dòng cho dễ nhìn */
+      line-height: 1.6;
     }
 
     .loading {
       text-align: center;
-      color: #888;
+      color: #666;
       margin-top: 20px;
     }
 
@@ -49,9 +86,17 @@
       font-weight: bold;
     }
 
+    .status-msg {
+      text-align: center;
+      margin-top: 15px;
+      padding: 10px;
+    }
+
+    .error { color: #d32f2f; }
+
     @media (max-width: 600px) {
       body { padding: 10px; }
-      input { font-size: 18px; }
+      input { font-size: 16px; } /* 16px tránh iOS tự động zoom vào input */
       .card { font-size: 15px; }
     }
   </style>
@@ -60,18 +105,22 @@
 <body>
 
 <h2>🔍 Tra cứu BHXH</h2>
-<div style="text-align:center; margin-top:10px;">
-  <p>📱 Quét QR để mở nhanh</p>
-<a id="https//:zalo.me/0935012568" href="#" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background-color: #0068ff; color: white; border-radius: 20px; text-decoration: none; font-size: 13px; font-weight: bold;">
-                <span>💬</span> Liên hệ Zalo Hỗ Trợ
-</a>
+
+<div class="support-box">
+  <p style="margin-bottom: 8px;">📱 Quét QR để mở nhanh</p>
+  <a href="https://zalo.me/0935012568" target="_blank" class="btn-zalo">
+    <span>💬</span> Liên hệ Zalo Hỗ Trợ
+  </a>
   <img 
-    src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://bhxh.pages.dev/" 
+    class="qr-code"
+    src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://bhxh.pages.dev/" 
     alt="QR Code"
+    width="180"
+    height="180"
   >
 </div>  
 
-<input type="text" id="search" placeholder="Nhập chính xác số Căn cước..." onkeyup="debounceSearch()">
+<input type="text" id="search" placeholder="Nhập chính xác số Căn cước..." oninput="debounceSearch()">
 
 <div id="result"></div>
 
@@ -80,53 +129,67 @@ const API = "https://script.google.com/macros/s/AKfycbxkx_znMipTc_6rjwF4-HR1gZr5
 
 let timeoutId;
 
-// Hàm định dạng số tiền sang chuẩn Việt Nam (vd: 526407 -> 526.407 VNĐ)
+// Hàm định dạng số tiền sang chuẩn Việt Nam
 function formatMoney(amount) {
-  if (!amount || isNaN(amount)) return "0 VNĐ";
+  if (amount === undefined || amount === null || isNaN(amount)) return "0 VNĐ";
   return Number(amount).toLocaleString('vi-VN') + " VNĐ";
 }
 
-// Chờ người dùng gõ xong (500ms) mới gửi request
+// Chờ người dùng dừng gõ 400ms
 function debounceSearch() {
   clearTimeout(timeoutId);
-  timeoutId = setTimeout(search, 500);
+  timeoutId = setTimeout(search, 400);
 }
 
 function search() {
-  const input = document.getElementById("search").value.trim();
+  const inputEl = document.getElementById("search");
   const div = document.getElementById("result");
+  const query = inputEl.value.trim();
 
-  if (!input) {
+  if (!query) {
     div.innerHTML = "";
     return;
   }
 
-  // Loading
   div.innerHTML = `<div class="loading">⏳ Đang tìm kiếm...</div>`;
 
-  fetch(API + "?q=" + encodeURIComponent(input))
-    .then(res => res.json())
+  fetch(`${API}?q=${encodeURIComponent(query)}`)
+    .then(res => {
+      if (!res.ok) throw new Error("Lỗi kết nối mạng");
+      return res.json();
+    })
     .then(data => {
-      div.innerHTML = "";
-
-      if (!data || data.length === 0) {
-        div.innerHTML = `<div style="text-align:center; margin-top:15px; color:red;">❌ Không tìm thấy dữ liệu. Vui lòng nhập chính xác số Căn cước!</div>`;
+      if (!Array.isArray(data) || data.length === 0) {
+        div.innerHTML = `<div class="status-msg error">❌ Không tìm thấy dữ liệu. Vui lòng kiểm tra lại số Căn cước!</div>`;
         return;
       }
 
-      data.forEach(item => {
-        div.innerHTML += `
-          <div class="card">
-            <b>${item.ten}</b><br>
-            Số Căn cước: <b>${item.ma}</b><br>
-            Số tiền cần hoàn trả: <span class="money">${formatMoney(item.soHop)}</span>
-          </div>
-        `;
-      });
+      // Dùng map để gộp HTML, chỉ vẽ DOM 1 lần duy nhất
+      const htmlContent = data.map(item => `
+        <div class="card">
+          <b>${escapeHtml(item.ten)}</b><br>
+          Số Căn cước: <b>${escapeHtml(item.ma)}</b><br>
+          Số tiền cần hoàn trả: <span class="money">${formatMoney(item.soHop)}</span>
+        </div>
+      `).join('');
+
+      div.innerHTML = htmlContent;
     })
     .catch(err => {
-      div.innerHTML = `<div style="text-align:center; color:red;">⚠️ Có lỗi xảy ra, vui lòng thử lại!</div>`;
+      console.error(err);
+      div.innerHTML = `<div class="status-msg error">⚠️ Có lỗi xảy ra trong quá trình tra cứu. Vui lòng thử lại sau!</div>`;
     });
+}
+
+// Hàm hỗ trợ phòng chống tấn công XSS
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 </script>
 
