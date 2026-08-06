@@ -16,7 +16,42 @@
       background: #f5f6fa;
       color: #333;
     }
-
+    
+     /* THANH NAV TABS MỚI */
+        .nav-tabs{
+            display:flex;
+            justify-content:center;
+            gap:12px;
+            flex-wrap:wrap;
+            margin:20px auto;
+        }
+        
+        .nav-tab{
+            display:flex;
+            align-items:center;
+            gap:8px;
+            padding:12px 22px;
+            border-radius:30px;
+            background:#fff;
+            color:#334155;
+            font-weight:600;
+            text-decoration:none;
+            border:1px solid #e5e7eb;
+            transition:.25s;
+        }
+        
+        .nav-tab:hover{
+            transform:translateY(-2px);
+            box-shadow:0 8px 18px rgba(0,0,0,.12);
+            color:#2563eb;
+        }
+        
+        .nav-tab.active{
+            background:linear-gradient(135deg,#2563eb,#1e40af);
+            color:#fff;
+            border:none;
+        }         
+    
     h2 {
       text-align: center;
       margin-bottom: 15px;
@@ -131,6 +166,14 @@
 
 <body>
 
+<!-- THANH TAB TRUY CẬP CÁC TRANG -->
+    <div class="nav-tabs">
+        <a href="https://bangchamcong.pages.dev" target="_blank" class="nav-tab">📋 Chấm Công</a>
+        <a href="https://noiquy.pages.dev" target="_blank" class="nav-tab">📜 Nội Quy</a>
+        <a href="#" class="nav-tab active">🏥 BHXH</a>
+        <a href="https://antoan.pages.dev" target="_blank" class="nav-tab">🛡️ An Toàn</a>
+    </div>
+  
 <h2>🔍 Tra cứu thu hồi tiền hưởng BHXH Đợt 1</h2>
 
 <div class="support-box"> 
