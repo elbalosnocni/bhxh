@@ -6,185 +6,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      padding: 15px;
-      background: #f5f6fa;
-      color: #333;
-    }
+    * { box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; padding: 15px; background: #f5f6fa; color: #333; }
     
-    /* THANH NAV TABS MỚI */
-    .nav-tabs {
-        display: flex;
-        justify-content: center;
-        gap: 12px;
-        flex-wrap: wrap;
-        margin: 20px auto;
-    }
+    .nav-tabs { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin: 20px auto; }
+    .nav-tab { display: flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 30px; background: #fff; color: #334155; font-weight: 600; text-decoration: none; border: 1px solid #e5e7eb; transition: .25s; }
+    .nav-tab:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,.12); color: #2563eb; }
+    .nav-tab.active { background: linear-gradient(135deg, #2563eb, #1e40af); color: #fff; border: none; }          
     
-    .nav-tab {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 12px 22px;
-        border-radius: 30px;
-        background: #fff;
-        color: #334155;
-        font-weight: 600;
-        text-decoration: none;
-        border: 1px solid #e5e7eb;
-        transition: .25s;
-    }
-    
-    .nav-tab:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 18px rgba(0,0,0,.12);
-        color: #2563eb;
-    }
-    
-    .nav-tab.active {
-        background: linear-gradient(135deg, #2563eb, #1e40af);
-        color: #fff;
-        border: none;
-    }          
-    
-    h2 {
-      text-align: center;
-      margin-bottom: 15px;
-    }
+    h2 { text-align: center; margin-bottom: 15px; }
+    .support-box { text-align: center; margin-bottom: 20px; }
+    .btn-zalo { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background-color: #0068ff; color: white; border-radius: 20px; text-decoration: none; font-size: 13px; font-weight: bold; margin-bottom: 15px; }
+    .qr-code { display: block; margin: 10px auto; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
-    .support-box {
-      text-align: center;
-      margin-bottom: 20px;
-    }
+    .search-box { display: flex; gap: 8px; max-width: 480px; margin: 10px auto; flex-wrap: wrap; justify-content: center; }
+    .search-box input { flex: 1; min-width: 200px; padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; outline: none; transition: border-color 0.2s; }
+    .search-box input:focus { border-color: #0068ff; }
 
-    .btn-zalo {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 16px;
-      background-color: #0068ff;
-      color: white;
-      border-radius: 20px;
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: bold;
-      margin-bottom: 15px;
-    }
+    .btn-search { padding: 12px 20px; background-color: #0068ff; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background-color 0.2s; white-space: nowrap; }
+    .btn-search:hover { background-color: #0052cc; }
+    .btn-search:disabled { background-color: #a0c4ff; cursor: not-allowed; }
 
-    .qr-code {
-      display: block;
-      margin: 10px auto;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
+    .btn-admin { padding: 12px 16px; background-color: #475569; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; transition: background-color 0.2s; white-space: nowrap; }
+    .btn-admin:hover { background-color: #334155; }
 
-    /* Khung tìm kiếm kết hợp Nút bấm */
-    .search-box {
-      display: flex;
-      gap: 8px;
-      max-width: 480px;
-      margin: 10px auto;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .search-box input {
-      flex: 1;
-      min-width: 200px;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .search-box input:focus {
-      border-color: #0068ff;
-    }
-
-    .btn-search {
-      padding: 12px 20px;
-      background-color: #0068ff;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.2s;
-      white-space: nowrap;
-    }
-
-    .btn-search:hover {
-      background-color: #0052cc;
-    }
-
-    .btn-search:disabled {
-      background-color: #a0c4ff;
-      cursor: not-allowed;
-    }
-
-    /* ĐỊNH DẠNG NÚT ADMIN VÀ BADGE */
-    .btn-admin {
-      padding: 12px 16px;
-      background-color: #475569;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.2s;
-      white-space: nowrap;
-    }
-
-    .btn-admin:hover {
-      background-color: #334155;
-    }
-
-    .admin-badge {
-      background: #e11d48;
-      color: white;
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 12px;
-      vertical-align: middle;
-      display: none;
-    }
-
-    .card {
-      background: white;
-      border-radius: 10px;
-      padding: 15px;
-      margin: 10px auto;
-      max-width: 400px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      line-height: 1.6;
-    }
-
-    .loading {
-      text-align: center;
-      color: #666;
-      margin-top: 20px;
-    }
-
-    .money {
-      color: #d32f2f;
-      font-weight: bold;
-    }
-
-    .status-msg {
-      text-align: center;
-      margin-top: 15px;
-      padding: 10px;
-    }
-
+    .admin-badge { background: #e11d48; color: white; padding: 4px 10px; border-radius: 12px; font-size: 12px; vertical-align: middle; display: none; }
+    .card { background: white; border-radius: 10px; padding: 15px; margin: 10px auto; max-width: 400px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); line-height: 1.6; }
+    .loading { text-align: center; color: #666; margin-top: 20px; }
+    .money { color: #d32f2f; font-weight: bold; }
+    .status-msg { text-align: center; margin-top: 15px; padding: 10px; }
     .error { color: #d32f2f; }
 
     @media (max-width: 600px) {
@@ -197,7 +47,6 @@
 
 <body>
 
-<!-- THANH TAB TRUY CẬP CÁC TRANG -->
 <div class="nav-tabs">
     <a href="https://bangchamcong.pages.dev" target="_blank" class="nav-tab">📋 Chấm Công</a>
     <a href="https://noiquy.pages.dev" target="_blank" class="nav-tab">📜 Lỗi cơm</a>
@@ -217,18 +66,11 @@
     <span>💬</span> Bấm Liên hệ Hỗ Trợ
   </a>
   <p style="margin-bottom: 8px;">📱 Quét QR để mở nhanh</p>
-  <img 
-    class="qr-code"
-    src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://bhxh.pages.dev/" 
-    alt="QR Code"
-    width="180"
-    height="180"
-  >
+  <img class="qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://bhxh.pages.dev/" alt="QR Code" width="180" height="180">
 </div>  
 
 <p style="text-align: center;" id="searchGuide">Nhập chính xác số Căn cước để tra cứu</p>
 
-<!-- KHUNG TÌM KIẾM KÈM NÚT BẤM VÀ ADMIN -->
 <div class="search-box">
   <input type="text" id="search" placeholder="Nhập chính xác số Căn cước..." onkeydown="handleKeyDown(event)">
   <button type="button" id="btnSearch" class="btn-search" onclick="search()">Tìm kiếm</button>
@@ -237,31 +79,14 @@
 
 <div id="result"></div>
 
-<!-- VỊ TRÍ HIỂN THỊ THÔNG BÁO PDF CỐ ĐỊNH PHÍA DƯỚI -->
 <div style="max-width: 400px; margin: 25px auto 10px auto; background: white; padding: 12px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
-  <b style="display: block; text-align: center; margin-bottom: 8px; color: #d32f2f;">
-    📢 Công văn từ BHXH
-  </b>
-  <iframe 
-    src="https://drive.google.com/file/d/17yhRKPpTUNdqFdbgEWGQ-qXRrPq8SPiI/preview" 
-    width="100%" 
-    height="320" 
-    style="border: 1px solid #ccc; border-radius: 6px;"
-    allow="autoplay">
-  </iframe>
+  <b style="display: block; text-align: center; margin-bottom: 8px; color: #d32f2f;">📢 Công văn từ BHXH</b>
+  <iframe src="https://drive.google.com/file/d/17yhRKPpTUNdqFdbgEWGQ-qXRrPq8SPiI/preview" width="100%" height="320" style="border: 1px solid #ccc; border-radius: 6px;" allow="autoplay"></iframe>
 </div>
 
 <div style="max-width: 400px; margin: 25px auto 10px auto; background: white; padding: 12px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
-  <b style="display: block; text-align: center; margin-bottom: 8px; color: #d32f2f;">
-    🔍 Danh sách
-  </b>
-  <iframe 
-    src="https://drive.google.com/file/d/14QMQMFJPufPKBoJqYKCuOkzgVuU2kXze/preview" 
-    width="100%" 
-    height="320" 
-    style="border: 1px solid #ccc; border-radius: 6px;"
-    allow="autoplay">
-  </iframe>
+  <b style="display: block; text-align: center; margin-bottom: 8px; color: #d32f2f;">🔍 Danh sách</b>
+  <iframe src="https://drive.google.com/file/d/14QMQMFJPufPKBoJqYKCuOkzgVuU2kXze/preview" width="100%" height="320" style="border: 1px solid #ccc; border-radius: 6px;" allow="autoplay"></iframe>
 </div>
 
 <script>
@@ -269,10 +94,9 @@ const API = "https://script.google.com/macros/s/AKfycbxkx_znMipTc_6rjwF4-HR1gZr5
 
 let isAdmin = false;
 let idleTimer = null;
-const ADMIN_PASS = "12356"; // 👈 Mật khẩu Admin
-const IDLE_LIMIT = 5 * 60 * 1000; // 5 phút (ms)
+const ADMIN_PASS = "admin123"; 
+const IDLE_LIMIT = 5 * 60 * 1000; 
 
-// Khôi phục phiên làm việc khi tải trang
 window.addEventListener('DOMContentLoaded', () => {
   const sessionAuth = sessionStorage.getItem('adminAuthenticated_bhxh');
   const lastActivity = sessionStorage.getItem('lastAdminActivity_bhxh');
@@ -288,7 +112,6 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Kích hoạt giao diện Admin
 function activateAdminUI() {
   isAdmin = true;
   sessionStorage.setItem('adminAuthenticated_bhxh', 'true');
@@ -300,7 +123,6 @@ function activateAdminUI() {
   document.getElementById('searchGuide').innerText = 'Chế độ Admin: Nhập Họ Tên (tìm tương đối) hoặc Số Căn cước';
 }
 
-// Đăng xuất Admin
 function logoutAdmin(showAlert = true) {
   isAdmin = false;
   sessionStorage.removeItem('adminAuthenticated_bhxh');
@@ -318,7 +140,6 @@ function logoutAdmin(showAlert = true) {
   }
 }
 
-// Đăng nhập / Đăng xuất Admin
 function toggleAdmin() {
   if (!isAdmin) {
     let pass = prompt("Nhập mật khẩu Admin để tìm kiếm tự do theo Tên:");
@@ -334,12 +155,9 @@ function toggleAdmin() {
   }
 }
 
-// Bộ đếm thời gian 5 phút không hoạt động
 function resetIdleTimer() {
   if (!isAdmin) return;
-
   sessionStorage.setItem('lastAdminActivity_bhxh', Date.now().toString());
-
   if (idleTimer) clearTimeout(idleTimer);
 
   idleTimer = setTimeout(() => {
@@ -356,20 +174,17 @@ function startIdleTimer() {
   resetIdleTimer();
 }
 
-// Định dạng số tiền sang chuẩn VNĐ
 function formatMoney(amount) {
   if (amount === undefined || amount === null || isNaN(amount)) return "0 VNĐ";
   return Number(amount).toLocaleString('vi-VN') + " VNĐ";
 }
 
-// Bấm phím Enter để kích hoạt tìm kiếm
 function handleKeyDown(event) {
   if (event.key === "Enter") {
     search();
   }
 }
 
-// Hàm Fetch tự động thử lại 3 lần
 async function fetchWithRetry(url, retries = 3, delay = 1000) {
   for (let i = 0; i < retries; i++) {
     try {
@@ -398,12 +213,9 @@ async function search() {
   div.innerHTML = `<div class="loading">⏳ Đang tìm kiếm, vui lòng đợi...</div>`;
 
   try {
-    // Trường hợp Admin: Gọi API lấy dữ liệu và tiến hành lọc tương đối theo Tên hoặc Căn cước
-    let requestUrl = `${API}?q=${encodeURIComponent(query)}`;
-    if (isAdmin) {
-      requestUrl += `&admin=true`;
-    }
-
+    // Khi ở quyền Admin, gọi API lấy toàn bộ dữ liệu (không truyền tham số q)
+    // Khi ở quyền User, truyền số Căn cước qua tham số q
+    const requestUrl = isAdmin ? API : `${API}?q=${encodeURIComponent(query)}`;
     const rawData = await fetchWithRetry(requestUrl);
 
     if (!Array.isArray(rawData) || rawData.length === 0) {
@@ -411,8 +223,9 @@ async function search() {
       return;
     }
 
-    // Lọc phía Client nếu ở chế độ Admin để tìm kiếm tên linh hoạt
     let filteredData = rawData;
+
+    // Tiến hành lọc dữ liệu phía Client nếu là Admin
     if (isAdmin) {
       const lowerQuery = query.toLowerCase();
       filteredData = rawData.filter(item => {
@@ -427,6 +240,7 @@ async function search() {
       return;
     }
 
+    // Hiển thị danh sách kết quả (tất cả các trường hợp trùng tên đều sẽ xuất hiện)
     const htmlContent = filteredData.map(item => `
       <div class="card">
         <b>${escapeHtml(item.ten)}</b><br>
@@ -445,7 +259,6 @@ async function search() {
   }
 }
 
-// Hàm phòng chống XSS
 function escapeHtml(str) {
   if (!str) return '';
   return String(str)
