@@ -17,40 +17,40 @@
       color: #333;
     }
     
-     /* THANH NAV TABS MỚI */
-        .nav-tabs{
-            display:flex;
-            justify-content:center;
-            gap:12px;
-            flex-wrap:wrap;
-            margin:20px auto;
-        }
-        
-        .nav-tab{
-            display:flex;
-            align-items:center;
-            gap:8px;
-            padding:12px 22px;
-            border-radius:30px;
-            background:#fff;
-            color:#334155;
-            font-weight:600;
-            text-decoration:none;
-            border:1px solid #e5e7eb;
-            transition:.25s;
-        }
-        
-        .nav-tab:hover{
-            transform:translateY(-2px);
-            box-shadow:0 8px 18px rgba(0,0,0,.12);
-            color:#2563eb;
-        }
-        
-        .nav-tab.active{
-            background:linear-gradient(135deg,#2563eb,#1e40af);
-            color:#fff;
-            border:none;
-        }         
+    /* THANH NAV TABS MỚI */
+    .nav-tabs {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin: 20px auto;
+    }
+    
+    .nav-tab {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 22px;
+        border-radius: 30px;
+        background: #fff;
+        color: #334155;
+        font-weight: 600;
+        text-decoration: none;
+        border: 1px solid #e5e7eb;
+        transition: .25s;
+    }
+    
+    .nav-tab:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(0,0,0,.12);
+        color: #2563eb;
+    }
+    
+    .nav-tab.active {
+        background: linear-gradient(135deg, #2563eb, #1e40af);
+        color: #fff;
+        border: none;
+    }          
     
     h2 {
       text-align: center;
@@ -87,12 +87,15 @@
     .search-box {
       display: flex;
       gap: 8px;
-      max-width: 400px;
+      max-width: 480px;
       margin: 10px auto;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .search-box input {
       flex: 1;
+      min-width: 200px;
       padding: 12px;
       border-radius: 8px;
       border: 1px solid #ccc;
@@ -127,6 +130,34 @@
       cursor: not-allowed;
     }
 
+    /* ĐỊNH DẠNG NÚT ADMIN VÀ BADGE */
+    .btn-admin {
+      padding: 12px 16px;
+      background-color: #475569;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-admin:hover {
+      background-color: #334155;
+    }
+
+    .admin-badge {
+      background: #e11d48;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      vertical-align: middle;
+      display: none;
+    }
+
     .card {
       background: white;
       border-radius: 10px;
@@ -158,7 +189,7 @@
 
     @media (max-width: 600px) {
       body { padding: 10px; }
-      .search-box input { font-size: 16px; } /* 16px tránh iOS tự động zoom */
+      .search-box input { font-size: 16px; }
       .card { font-size: 15px; }
     }
   </style>
@@ -167,16 +198,19 @@
 <body>
 
 <!-- THANH TAB TRUY CẬP CÁC TRANG -->
-    <div class="nav-tabs">
-        <a href="https://bangchamcong.pages.dev" target="_blank" class="nav-tab">📋 Chấm Công</a>
-        <a href="https://noiquy.pages.dev" target="_blank" class="nav-tab">📜 Lỗi cơm</a>
-        <a href="https://phucap.pages.dev" target="_blank" class="nav-tab">📋 Phụ cấp sữa</a>
-        <a href="#" class="nav-tab active">🏥 BHXH</a>
-        <a href="https://antoan.pages.dev" target="_blank" class="nav-tab">🔍 Rà soát</a>
-        <a href="https://antoan.pages.dev" target="_blank" class="nav-tab">🛡️ An Toàn</a>
-    </div>
+<div class="nav-tabs">
+    <a href="https://bangchamcong.pages.dev" target="_blank" class="nav-tab">📋 Chấm Công</a>
+    <a href="https://noiquy.pages.dev" target="_blank" class="nav-tab">📜 Lỗi cơm</a>
+    <a href="https://phucap.pages.dev" target="_blank" class="nav-tab">📋 Phụ cấp sữa</a>
+    <a href="#" class="nav-tab active">🏥 BHXH</a>
+    <a href="https://antoan.pages.dev" target="_blank" class="nav-tab">🔍 Rà soát</a>
+    <a href="https://antoan.pages.dev" target="_blank" class="nav-tab">🛡️ An Toàn</a>
+</div>
   
-<h2>🔍 Tra cứu thu hồi tiền hưởng BHXH Đợt 1</h2>
+<h2>
+  🔍 Tra cứu thu hồi tiền hưởng BHXH Đợt 1
+  <span id="adminBadge" class="admin-badge">ADMIN MODE</span>
+</h2>
 
 <div class="support-box"> 
   <a href="https://zalo.me/0348653831" target="_blank" class="btn-zalo">
@@ -192,10 +226,13 @@
   >
 </div>  
 
-<!-- KHUNG TÌM KIẾM KÈM NÚT BẤM -->
+<p style="text-align: center;" id="searchGuide">Nhập chính xác số Căn cước để tra cứu</p>
+
+<!-- KHUNG TÌM KIẾM KÈM NÚT BẤM VÀ ADMIN -->
 <div class="search-box">
   <input type="text" id="search" placeholder="Nhập chính xác số Căn cước..." onkeydown="handleKeyDown(event)">
   <button type="button" id="btnSearch" class="btn-search" onclick="search()">Tìm kiếm</button>
+  <button type="button" id="authBtn" class="btn-admin" onclick="toggleAdmin()">🔑 Admin Log In</button>
 </div>
 
 <div id="result"></div>
@@ -230,6 +267,95 @@
 <script>
 const API = "https://script.google.com/macros/s/AKfycbxkx_znMipTc_6rjwF4-HR1gZr5imjdnDxJKofqRcL_027U6Xc4-F3O0UgS82k3rhh-zw/exec";
 
+let isAdmin = false;
+let idleTimer = null;
+const ADMIN_PASS = "12356"; // 👈 Mật khẩu Admin
+const IDLE_LIMIT = 5 * 60 * 1000; // 5 phút (ms)
+
+// Khôi phục phiên làm việc khi tải trang
+window.addEventListener('DOMContentLoaded', () => {
+  const sessionAuth = sessionStorage.getItem('adminAuthenticated_bhxh');
+  const lastActivity = sessionStorage.getItem('lastAdminActivity_bhxh');
+
+  if (sessionAuth === 'true' && lastActivity) {
+    const timePassed = Date.now() - parseInt(lastActivity, 10);
+    if (timePassed < IDLE_LIMIT) {
+      activateAdminUI();
+      startIdleTimer();
+    } else {
+      logoutAdmin(false);
+    }
+  }
+});
+
+// Kích hoạt giao diện Admin
+function activateAdminUI() {
+  isAdmin = true;
+  sessionStorage.setItem('adminAuthenticated_bhxh', 'true');
+  sessionStorage.setItem('lastAdminActivity_bhxh', Date.now().toString());
+
+  document.getElementById('adminBadge').style.display = 'inline-block';
+  document.getElementById('authBtn').innerText = '🚪 Đăng xuất';
+  document.getElementById('search').placeholder = 'Nhập Họ Tên hoặc số Căn cước...';
+  document.getElementById('searchGuide').innerText = 'Chế độ Admin: Nhập Họ Tên (tìm tương đối) hoặc Số Căn cước';
+}
+
+// Đăng xuất Admin
+function logoutAdmin(showAlert = true) {
+  isAdmin = false;
+  sessionStorage.removeItem('adminAuthenticated_bhxh');
+  sessionStorage.removeItem('lastAdminActivity_bhxh');
+  
+  if (idleTimer) clearTimeout(idleTimer);
+
+  document.getElementById('adminBadge').style.display = 'none';
+  document.getElementById('authBtn').innerText = '🔑 Admin Log In';
+  document.getElementById('search').placeholder = 'Nhập chính xác số Căn cước...';
+  document.getElementById('searchGuide').innerText = 'Nhập chính xác số Căn cước để tra cứu';
+
+  if (showAlert) {
+    alert("Đã đăng xuất quyền Admin.");
+  }
+}
+
+// Đăng nhập / Đăng xuất Admin
+function toggleAdmin() {
+  if (!isAdmin) {
+    let pass = prompt("Nhập mật khẩu Admin để tìm kiếm tự do theo Tên:");
+    if (pass === ADMIN_PASS) {
+      activateAdminUI();
+      startIdleTimer();
+      alert("Đã kích hoạt quyền Admin! Tự động đăng xuất sau 5 phút không hoạt động.");
+    } else if (pass !== null) {
+      alert("Mật khẩu không chính xác!");
+    }
+  } else {
+    logoutAdmin(true);
+  }
+}
+
+// Bộ đếm thời gian 5 phút không hoạt động
+function resetIdleTimer() {
+  if (!isAdmin) return;
+
+  sessionStorage.setItem('lastAdminActivity_bhxh', Date.now().toString());
+
+  if (idleTimer) clearTimeout(idleTimer);
+
+  idleTimer = setTimeout(() => {
+    logoutAdmin(false);
+    alert("Phiên làm việc Admin đã hết hạn do 5 phút không có thao tác!");
+  }, IDLE_LIMIT);
+}
+
+function startIdleTimer() {
+  const events = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
+  events.forEach(evt => {
+    window.addEventListener(evt, resetIdleTimer, { passive: true });
+  });
+  resetIdleTimer();
+}
+
 // Định dạng số tiền sang chuẩn VNĐ
 function formatMoney(amount) {
   if (amount === undefined || amount === null || isNaN(amount)) return "0 VNĐ";
@@ -243,7 +369,7 @@ function handleKeyDown(event) {
   }
 }
 
-// Hàm Fetch tự động thử lại 3 lần nếu Google Sheet API bị nghẽn
+// Hàm Fetch tự động thử lại 3 lần
 async function fetchWithRetry(url, retries = 3, delay = 1000) {
   for (let i = 0; i < retries; i++) {
     try {
@@ -251,7 +377,7 @@ async function fetchWithRetry(url, retries = 3, delay = 1000) {
       if (res.ok) return await res.json();
     } catch (err) {
       if (i === retries - 1) throw err;
-      await new Promise(r => setTimeout(r, delay)); // Chờ 1 giây trước khi thử lại
+      await new Promise(r => setTimeout(r, delay));
     }
   }
   throw new Error("Không thể kết nối đến máy chủ");
@@ -264,23 +390,44 @@ async function search() {
   const query = inputEl.value.trim();
 
   if (!query) {
-    div.innerHTML = `<div class="status-msg error">⚠️ Vui lòng nhập số Căn cước trước khi tìm kiếm!</div>`;
+    div.innerHTML = `<div class="status-msg error">⚠️ Vui lòng nhập ${isAdmin ? 'Họ Tên hoặc số Căn cước' : 'số Căn cước'} trước khi tìm kiếm!</div>`;
     return;
   }
 
-  // Khóa nút bấm và hiển thị trạng thái đang tải
   btnEl.disabled = true;
   div.innerHTML = `<div class="loading">⏳ Đang tìm kiếm, vui lòng đợi...</div>`;
 
   try {
-    const data = await fetchWithRetry(`${API}?q=${encodeURIComponent(query)}`);
+    // Trường hợp Admin: Gọi API lấy dữ liệu và tiến hành lọc tương đối theo Tên hoặc Căn cước
+    let requestUrl = `${API}?q=${encodeURIComponent(query)}`;
+    if (isAdmin) {
+      requestUrl += `&admin=true`;
+    }
 
-    if (!Array.isArray(data) || data.length === 0) {
-      div.innerHTML = `<div class="status-msg error">❌ Không tìm thấy dữ liệu. Vui lòng kiểm tra lại số Căn cước!</div>`;
+    const rawData = await fetchWithRetry(requestUrl);
+
+    if (!Array.isArray(rawData) || rawData.length === 0) {
+      div.innerHTML = `<div class="status-msg error">❌ Không tìm thấy dữ liệu cho: ${escapeHtml(query)}</div>`;
       return;
     }
 
-    const htmlContent = data.map(item => `
+    // Lọc phía Client nếu ở chế độ Admin để tìm kiếm tên linh hoạt
+    let filteredData = rawData;
+    if (isAdmin) {
+      const lowerQuery = query.toLowerCase();
+      filteredData = rawData.filter(item => {
+        const ma = String(item.ma || '').toLowerCase();
+        const ten = String(item.ten || '').toLowerCase();
+        return ma === lowerQuery || ten.includes(lowerQuery);
+      });
+    }
+
+    if (filteredData.length === 0) {
+      div.innerHTML = `<div class="status-msg error">❌ Không tìm thấy dữ liệu phù hợp cho: ${escapeHtml(query)}</div>`;
+      return;
+    }
+
+    const htmlContent = filteredData.map(item => `
       <div class="card">
         <b>${escapeHtml(item.ten)}</b><br>
         Số Căn cước: <b>${escapeHtml(item.ma)}</b><br>
@@ -294,7 +441,7 @@ async function search() {
     console.error(err);
     div.innerHTML = `<div class="status-msg error">⚠️ Kết nối chập chờn. Vui lòng bấm "Tìm kiếm" để thử lại!</div>`;
   } finally {
-    btnEl.disabled = false; // Mở lại nút bấm sau khi thực hiện xong
+    btnEl.disabled = false;
   }
 }
 
