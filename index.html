@@ -94,7 +94,7 @@ const API = "https://script.google.com/macros/s/AKfycbxkx_znMipTc_6rjwF4-HR1gZr5
 
 let isAdmin = false;
 let idleTimer = null;
-const ADMIN_PASS = "admin123"; 
+const ADMIN_PASS = "12356"; 
 const IDLE_LIMIT = 5 * 60 * 1000; 
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -175,8 +175,10 @@ function startIdleTimer() {
 }
 
 function formatMoney(amount) {
-  if (amount === undefined || amount === null || isNaN(amount)) return "0 VNĐ";
-  return Number(amount).toLocaleString('vi-VN') + " VNĐ";
+  if (amount === undefined || amount === null || amount === "") return "0 VNĐ";
+  let cleanStr = String(amount).replace(/[,.\s]/g, "");
+  let num = parseFloat(cleanStr) || 0;
+  return num.toLocaleString('vi-VN') + " VNĐ";
 }
 
 function handleKeyDown(event) {
@@ -213,8 +215,6 @@ async function search() {
   div.innerHTML = `<div class="loading">⏳ Đang tìm kiếm, vui lòng đợi...</div>`;
 
   try {
-    // Khi ở quyền Admin, gọi API lấy toàn bộ dữ liệu (không truyền tham số q)
-    // Khi ở quyền User, truyền số Căn cước qua tham số q
     const requestUrl = isAdmin ? API : `${API}?q=${encodeURIComponent(query)}`;
     const rawData = await fetchWithRetry(requestUrl);
 
@@ -223,32 +223,43 @@ async function search() {
       return;
     }
 
-    let filteredData = rawData;
+    let filteredData = [];
 
-    // Tiến hành lọc dữ liệu phía Client nếu là Admin
-    if (isAdmin) {
-      const lowerQuery = query.toLowerCase();
-      filteredData = rawData.filter(item => {
-        const ma = String(item.ma || '').toLowerCase();
-        const ten = String(item.ten || '').toLowerCase();
+    const lowerQuery = query.toLowerCase();
+
+    // Đọc đa dạng Tên Cột để tránh bị lỗi do lệch khoảng trắng hoặc hoa thường
+    filteredData = rawData.filter(item => {
+      let ten = String(item["Họ và tên"] || item["Họ và Tên"] || item["ten"] || item["Tên"] || "").toLowerCase();
+      let ma = String(item["Mã nhân viên"] || item["Mã Nhân Viên"] || item["ma"] || item["CCCD"] || "").toLowerCase();
+
+      if (isAdmin) {
         return ma === lowerQuery || ten.includes(lowerQuery);
-      });
-    }
+      } else {
+        return ma === lowerQuery;
+      }
+    });
 
     if (filteredData.length === 0) {
       div.innerHTML = `<div class="status-msg error">❌ Không tìm thấy dữ liệu phù hợp cho: ${escapeHtml(query)}</div>`;
       return;
     }
 
-    // Hiển thị danh sách kết quả (tất cả các trường hợp trùng tên đều sẽ xuất hiện)
-    const htmlContent = filteredData.map(item => `
-      <div class="card">
-        <b>${escapeHtml(item.ten)}</b><br>
-        Số Căn cước: <b>${escapeHtml(item.ma)}</b><br>
-        Số tiền cần hoàn trả: <span class="money">${formatMoney(item.soHop)}</span><br>
-        Ngày thu hồi: ${escapeHtml(item.thang)}<br>
-      </div>
-    `).join('');
+    // Xuất thông tin chuẩn theo tiêu đề cột trong hình Google Sheets
+    const htmlContent = filteredData.map(item => {
+      let ten = item["Họ và tên"] || item["Họ và Tên"] || item["ten"] || "";
+      let ma = item["Mã nhân viên"] || item["Mã Nhân Viên"] || item["ma"] || "";
+      let tien = item["Số tiền"] || item["soHop"] || 0;
+      let thang = item["Tháng chưa nhận"] || item["thang"] || "";
+
+      return `
+        <div class="card">
+          <b>${escapeHtml(ten)}</b><br>
+          Mã NV / Số Căn cước: <b>${escapeHtml(ma)}</b><br>
+          Số tiền: <span class="money">${formatMoney(tien)}</span><br>
+          Tháng chưa nhận: ${escapeHtml(thang)}<br>
+        </div>
+      `;
+    }).join('');
 
     div.innerHTML = htmlContent;
   } catch (err) {
